@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * IDEALIAGroup srl
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@idealiagroup.com so we can send you a copy immediately.
+ *
+ * @category   MSP
+ * @package    MSP_UserLockout
+ * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MSP\UserLockout\Api\LockoutInterface" type="MSP\UserLockout\Model\Lockout" />
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="msp_userlockout" xsi:type="object">MSP\UserLockout\Command\Unlock</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="MspUserLockoutListGridDataProvider"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object"
+                      shared="false">MSP\UserLockout\Model\ResourceModel\Lockout\Collection</argument>
+            <argument name="filterPool" xsi:type="object"
+                      shared="false">MspUserLockoutListItemIdFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MspUserLockoutListItemIdFilterPool"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular"
+                      xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext"
+                      xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="msp_userlockout_list_data_source"
+                      xsi:type="string">MSP\UserLockout\Model\ResourceModel\Grid\Lockout\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="MSP\UserLockout\Model\ResourceModel\Grid\Lockout\Collection"
+                 type="MSP\UserLockout\Ui\Component\DataProvider\SearchResult\LockedList">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">msp_user_lockout</argument>
+            <argument name="resourceModel"
+                      xsi:type="string">MSP\UserLockout\Model\ResourceModel\Lockout\Collection</argument>
+        </arguments>
+    </virtualType>
+</config>
