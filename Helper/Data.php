@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,19 +10,17 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace MSP\UserLockout\Helper;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\Helper\Context;
 
 class Data extends AbstractHelper
 {
@@ -30,17 +28,6 @@ class Data extends AbstractHelper
     const XML_PATH_GENERAL_FAILURE_COUNT = 'msp_securitysuite/userlockout/failure_count';
     const XML_PATH_GENERAL_FAILURE_INTERVAL = 'msp_securitysuite/userlockout/failure_interval';
     const XML_PATH_GENERAL_FAILURE_PENALTY = 'msp_securitysuite/userlockout/failure_penalty';
-
-    protected $scopeConfigInterface;
-
-    public function __construct(
-        Context $context,
-        ScopeConfigInterface $scopeConfigInterface
-    ) {
-        $this->scopeConfigInterface = $scopeConfigInterface;
-
-        parent::__construct($context);
-    }
 
     /**
      * Get lockout error
@@ -58,7 +45,7 @@ class Data extends AbstractHelper
      */
     public function getFailureCount()
     {
-        return max((int) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_FAILURE_COUNT), 1);
+        return max((int) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_FAILURE_COUNT), 1);
     }
 
     /**
@@ -67,7 +54,7 @@ class Data extends AbstractHelper
      */
     public function getFailureInterval()
     {
-        return max((int) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_FAILURE_INTERVAL), 5);
+        return max((int) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_FAILURE_INTERVAL), 5);
     }
 
     /**
@@ -76,7 +63,7 @@ class Data extends AbstractHelper
      */
     public function getFailurePenalty()
     {
-        return max((int) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_FAILURE_PENALTY), 5);
+        return max((int) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_FAILURE_PENALTY), 5);
     }
 
     /**
@@ -85,6 +72,6 @@ class Data extends AbstractHelper
      */
     public function getEnabled()
     {
-        return (bool) $this->scopeConfigInterface->getValue(self::XML_PATH_GENERAL_ENABLED);
+        return (bool) $this->scopeConfig->getValue(self::XML_PATH_GENERAL_ENABLED);
     }
 }

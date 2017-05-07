@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -29,21 +29,36 @@ use MSP\UserLockout\Helper\Data;
 
 class AccountManagementPlugin
 {
-    protected $lockoutInterface;
-    protected $remoteAddress;
-    protected $helperData;
-    protected $http;
+    /**
+     * @var LockoutInterface
+     */
+    private $lockout;
+
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @var Http
+     */
+    private $http;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
 
     public function __construct(
-        LockoutInterface $lockoutInterface,
+        LockoutInterface $lockout,
         RemoteAddress $remoteAddress,
         Http $http,
         Data $helperData
     ) {
-        $this->lockoutInterface = $lockoutInterface;
+        $this->lockout = $lockout;
         $this->remoteAddress = $remoteAddress;
-        $this->helperData = $helperData;
         $this->http = $http;
+        $this->helperData = $helperData;
     }
 
     public function aroundAuthenticate(
@@ -58,8 +73,8 @@ class AccountManagementPlugin
 
         $ip = $this->remoteAddress->getRemoteAddress();
 
-        if ($this->lockoutInterface->isLockedOut($username, $ip)) {
-            $interval = $this->lockoutInterface->getIntervalAsString($username, $ip);
+        if ($this->lockout->isLockedOut($username, $ip)) {
+            $interval = $this->lockout->getIntervalAsString($username, $ip);
             $errorMessage = $this->helperData->getLockoutError($interval);
 
             throw new InvalidEmailOrPasswordException($errorMessage);
@@ -68,12 +83,12 @@ class AccountManagementPlugin
         $exception = null;
         try {
             $res = $procede($username, $password);
-            $this->lockoutInterface->reset($username, $ip);
+            $this->lockout->reset($username, $ip);
             return $res;
 
         } catch (\Exception $e) {
             $exception = $e;
-            $this->lockoutInterface->registerFailure($username, $ip);
+            $this->lockout->registerFailure($username, $ip);
         }
 
         throw $exception;

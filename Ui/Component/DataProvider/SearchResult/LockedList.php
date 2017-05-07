@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,18 +10,17 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace MSP\UserLockout\Ui\Component\DataProvider\SearchResult;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
-use Magento\Framework\Api;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
@@ -30,7 +29,10 @@ use Psr\Log\LoggerInterface as Logger;
 
 class LockedList extends SearchResult
 {
-    protected $dateTime;
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
 
     public function __construct(
         EntityFactory $entityFactory,
@@ -42,7 +44,6 @@ class LockedList extends SearchResult
         $resourceModel
     ) {
         $this->dateTime = $dateTime;
-
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
 

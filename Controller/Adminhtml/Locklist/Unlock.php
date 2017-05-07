@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,21 +27,31 @@ use MSP\UserLockout\Model\ResourceModel\Lockout\CollectionFactory;
 
 class Unlock extends Action
 {
-    protected $lockoutInterface;
-    protected $collectionFactory;
-    protected $filter;
+    /**
+     * @var Filter
+     */
+    private $filter;
+
+    /**
+     * @var LockoutInterface
+     */
+    private $lockout;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
     public function __construct(
         Action\Context $context,
         Filter $filter,
-        LockoutInterface $lockoutInterface,
+        LockoutInterface $lockout,
         CollectionFactory $collectionFactory
     ) {
-        $this->lockoutInterface = $lockoutInterface;
-        $this->collectionFactory = $collectionFactory;
-        $this->filter = $filter;
-
         parent::__construct($context);
+        $this->filter = $filter;
+        $this->lockout = $lockout;
+        $this->collectionFactory = $collectionFactory;
     }
 
     protected function _isAllowed()
@@ -57,7 +67,7 @@ class Unlock extends Action
             $lock->release();
         }
 
-        $this->messageManager->addSuccess('Selected locks have been released.');
+        $this->messageManager->addSuccessMessage('Selected locks have been released.');
 
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/index');

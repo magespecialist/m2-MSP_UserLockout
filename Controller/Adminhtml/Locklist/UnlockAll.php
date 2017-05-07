@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -25,15 +25,17 @@ use MSP\UserLockout\Api\LockoutInterface;
 
 class UnlockAll extends Action
 {
-    protected $lockoutInterface;
+    /**
+     * @var LockoutInterface
+     */
+    private $lockout;
 
     public function __construct(
         Action\Context $context,
-        LockoutInterface $lockoutInterface
+        LockoutInterface $lockout
     ) {
-        $this->lockoutInterface = $lockoutInterface;
-
         parent::__construct($context);
+        $this->lockout = $lockout;
     }
 
     protected function _isAllowed()
@@ -43,8 +45,8 @@ class UnlockAll extends Action
 
     public function execute()
     {
-        $this->lockoutInterface->releaseAll();
-        $this->messageManager->addSuccess('All locks have been released.');
+        $this->lockout->releaseAll();
+        $this->messageManager->addSuccessMessage('All locks have been released.');
 
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('*/*/index');
