@@ -14,7 +14,8 @@ This module can temporary lock a customer account when too many login password a
 
 From command line: 
 
-`composer require msp/userlockout`
+`composer require msp/userlockout`<br />
+`php bin/magento setup:upgrade`
 
 **2. Enable and configure from your Magento backend config**
 
