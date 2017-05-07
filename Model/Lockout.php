@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -31,9 +31,20 @@ use MSP\UserLockout\Helper\Data;
 
 class Lockout extends AbstractModel implements LockoutInterface
 {
-    protected $helperData;
-    protected $dateTime;
-    protected $dtDateTime;
+    /**
+     * @var Data
+     */
+    private $helperData;
+
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var DateTime\DateTime
+     */
+    private $dtDateTime;
 
     public function __construct(
         Context $context,
@@ -45,11 +56,10 @@ class Lockout extends AbstractModel implements LockoutInterface
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->helperData = $helperData;
         $this->dateTime = $dateTime;
         $this->dtDateTime = $dtDateTime;
-
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     protected function _construct()
@@ -140,7 +150,7 @@ class Lockout extends AbstractModel implements LockoutInterface
      */
     public function release()
     {
-        $this->delete();
+        $this->getResource()->delete($this);
         return $this;
     }
 }

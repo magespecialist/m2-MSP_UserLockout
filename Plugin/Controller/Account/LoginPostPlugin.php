@@ -1,10 +1,23 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Riccardo
- * Date: 27/06/2016
- * Time: 12:15
+ * MageSpecialist
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@magespecialist.it so we can send you a copy immediately.
+ *
+ * @category   MSP
+ * @package    MSP_UserLockout
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace MSP\UserLockout\Plugin\Controller\Account;
 
 use Magento\Customer\Controller\Account\LoginPost;
@@ -17,23 +30,46 @@ use MSP\UserLockout\Helper\Data;
 
 class LoginPostPlugin
 {
-    protected $requestInterface;
-    protected $lockoutInterface;
-    protected $remoteAddress;
-    protected $messageManager;
-    protected $accountRedirect;
-    protected $helperData;
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var LockoutInterface
+     */
+    private $lockout;
+
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @var MessageManager
+     */
+    private $messageManager;
+
+    /**
+     * @var AccountRedirect
+     */
+    private $accountRedirect;
+
+    /**
+     * @var Data
+     */
+    private $helperData;
 
     public function __construct(
-        RequestInterface $requestInterface,
-        LockoutInterface $lockoutInterface,
+        RequestInterface $request,
+        LockoutInterface $lockout,
         RemoteAddress $remoteAddress,
         MessageManager $messageManager,
         AccountRedirect $accountRedirect,
         Data $helperData
     ) {
-        $this->requestInterface = $requestInterface;
-        $this->lockoutInterface = $lockoutInterface;
+        $this->request = $request;
+        $this->lockout = $lockout;
         $this->remoteAddress = $remoteAddress;
         $this->messageManager = $messageManager;
         $this->accountRedirect = $accountRedirect;
@@ -46,14 +82,14 @@ class LoginPostPlugin
     ) {
         // Must do this because error description is not correctly handled in loginPost
         if ($this->helperData->getEnabled()) {
-            $login = $this->requestInterface->getPost('login');
+            $login = $this->request->getPost('login');
 
             if (!empty($login['username'])) {
                 $username = $login['username'];
                 $ip = $this->remoteAddress->getRemoteAddress();
 
-                if ($this->lockoutInterface->isLockedOut($username, $ip)) {
-                    $interval = $this->lockoutInterface->getIntervalAsString($username, $ip);
+                if ($this->lockout->isLockedOut($username, $ip)) {
+                    $interval = $this->lockout->getIntervalAsString($username, $ip);
                     $errorMessage = $this->helperData->getLockoutError($interval);
 
                     $this->messageManager->addError($errorMessage);

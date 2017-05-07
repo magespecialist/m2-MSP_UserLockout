@@ -1,6 +1,6 @@
 <?php
 /**
- * IDEALIAGroup srl
+ * MageSpecialist
  *
  * NOTICE OF LICENSE
  *
@@ -10,11 +10,11 @@
  * http://opensource.org/licenses/osl-3.0.php
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to info@idealiagroup.com so we can send you a copy immediately.
+ * to info@magespecialist.it so we can send you a copy immediately.
  *
  * @category   MSP
  * @package    MSP_UserLockout
- * @copyright  Copyright (c) 2016 IDEALIAGroup srl (http://www.idealiagroup.com)
+ * @copyright  Copyright (c) 2017 Skeeller srl (http://www.magespecialist.it)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
@@ -27,7 +27,7 @@ use Magento\Framework\DB\Ddl\Table;
 
 class InstallSchema implements InstallSchemaInterface
 {
-    protected function _setupTableMain(SchemaSetupInterface $setup)
+    private function setupTableMain(SchemaSetupInterface $setup)
     {
         $tableName = $setup->getTable('msp_user_lockout');
         $table = $setup->getConnection()
@@ -60,7 +60,7 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()->createTable($table);
     }
 
-    protected function _setupTableFailure(SchemaSetupInterface $setup)
+    private function setupTableFailure(SchemaSetupInterface $setup)
     {
         $tableName = $setup->getTable('msp_user_lockout_failure');
         $table = $setup->getConnection()
@@ -106,8 +106,8 @@ class InstallSchema implements InstallSchemaInterface
     ) {
         $setup->startSetup();
 
-        $this->_setupTableMain($setup);
-        $this->_setupTableFailure($setup);
+        $this->setupTableMain($setup);
+        $this->setupTableFailure($setup);
 
         $setup->endSetup();
     }
