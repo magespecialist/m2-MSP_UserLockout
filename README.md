@@ -6,7 +6,7 @@ This module can temporary lock a customer account when too many login password a
 
 > Member of **MSP Security Suite**
 >
-> See: https://github.com/magespecialist/m2-MSP_SecuritySuiteFull
+> See: https://github.com/magespecialist/m2-MSP_Security_Suite
 
 ## Installing on Magento2:
 

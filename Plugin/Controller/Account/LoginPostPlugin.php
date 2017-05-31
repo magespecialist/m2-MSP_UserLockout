@@ -23,9 +23,11 @@ namespace MSP\UserLockout\Plugin\Controller\Account;
 use Magento\Customer\Controller\Account\LoginPost;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use MSP\SecuritySuiteCommon\Api\LogManagementInterface;
 use MSP\UserLockout\Api\LockoutInterface;
 use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
+use Magento\Framework\Event\ManagerInterface as EventInterface;
 use MSP\UserLockout\Helper\Data;
 
 class LoginPostPlugin
@@ -60,12 +62,18 @@ class LoginPostPlugin
      */
     private $helperData;
 
+    /**
+     * @var EventInterface
+     */
+    private $event;
+
     public function __construct(
         RequestInterface $request,
         LockoutInterface $lockout,
         RemoteAddress $remoteAddress,
         MessageManager $messageManager,
         AccountRedirect $accountRedirect,
+        EventInterface $event,
         Data $helperData
     ) {
         $this->request = $request;
@@ -74,6 +82,7 @@ class LoginPostPlugin
         $this->messageManager = $messageManager;
         $this->accountRedirect = $accountRedirect;
         $this->helperData = $helperData;
+        $this->event = $event;
     }
 
     public function aroundExecute(
@@ -89,6 +98,12 @@ class LoginPostPlugin
                 $ip = $this->remoteAddress->getRemoteAddress();
 
                 if ($this->lockout->isLockedOut($username, $ip)) {
+                    $this->event->dispatch(LogManagementInterface::EVENT_ACTIVITY, [
+                        'module' => 'MSP_UserLockout',
+                        'message' => 'Login attempt while locked',
+                        'username' => $username,
+                    ]);
+
                     $interval = $this->lockout->getIntervalAsString($username, $ip);
                     $errorMessage = $this->helperData->getLockoutError($interval);
 
