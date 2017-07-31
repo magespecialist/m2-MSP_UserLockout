@@ -22,13 +22,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <msp_securitysuite>
-            <userlockout>
+        <msp_securitysuite_userlockout>
+            <general>
                 <enabled>0</enabled>
                 <failure_count>3</failure_count>
                 <failure_interval>300</failure_interval>
                 <failure_penalty>600</failure_penalty>
-            </userlockout>
-        </msp_securitysuite>
+            </general>
+        </msp_securitysuite_userlockout>
     </default>
 </config>

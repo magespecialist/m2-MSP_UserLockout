@@ -24,10 +24,10 @@ use Magento\Framework\App\Helper\AbstractHelper;
 
 class Data extends AbstractHelper
 {
-    const XML_PATH_GENERAL_ENABLED = 'msp_securitysuite/userlockout/enabled';
-    const XML_PATH_GENERAL_FAILURE_COUNT = 'msp_securitysuite/userlockout/failure_count';
-    const XML_PATH_GENERAL_FAILURE_INTERVAL = 'msp_securitysuite/userlockout/failure_interval';
-    const XML_PATH_GENERAL_FAILURE_PENALTY = 'msp_securitysuite/userlockout/failure_penalty';
+    const XML_PATH_GENERAL_ENABLED = 'msp_securitysuite_userlockout/general/enabled';
+    const XML_PATH_GENERAL_FAILURE_COUNT = 'msp_securitysuite_userlockout/general/failure_count';
+    const XML_PATH_GENERAL_FAILURE_INTERVAL = 'msp_securitysuite_userlockout/general/failure_interval';
+    const XML_PATH_GENERAL_FAILURE_PENALTY = 'msp_securitysuite_userlockout/general/failure_penalty';
 
     /**
      * Get lockout error
